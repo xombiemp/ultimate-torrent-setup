@@ -8,7 +8,7 @@ rutorrent_svn="http://rutorrent.googlecode.com/svn/trunk/rutorrent"
 plugins_svn="http://rutorrent.googlecode.com/svn/trunk/plugins"
 filemanager_svn="http://svn.rutorrent.org/svn/filemanager/trunk"
 
-plugins=(_getdir _task autotools check_port chunks create datadir diskspace edit erasedata extratio filedrop geoip history httprpc mediainfo ratio scheduler screenshots seedingtime throttle tracklabels trafic unpack)
+plugins=(_getdir _noty _task autotools check_port chunks create data datadir diskspace edit erasedata extratio filedrop geoip history httprpc mediainfo ratio scheduler screenshots seedingtime source throttle tracklabels trafic unpack)
 hwk_plugins=(filemanager fileshare)
 
 updated="no"
