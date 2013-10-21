@@ -1,0 +1,94 @@
+#!/bin/bash
+
+webroot_path="/var/www"
+rutorrent_path="$webroot_path/rutorrent"
+plugins_path="$rutorrent_path/plugins"
+
+rutorrent_svn="http://rutorrent.googlecode.com/svn/trunk/rutorrent"
+plugins_svn="http://rutorrent.googlecode.com/svn/trunk/plugins"
+filemanager_svn="http://svn.rutorrent.org/svn/filemanager/trunk"
+
+plugins=(_getdir _task autotools check_port chunks create datadir diskspace edit erasedata extratio filedrop geoip history httprpc mediainfo ratio scheduler screenshots seedingtime throttle tracklabels trafic unpack)
+hwk_plugins=(filemanager fileshare)
+
+updated="no"
+
+
+if [ ! -d "$rutorrent_path" ] ; then
+    echo -e "INSTALLING rutorrent"
+    service rtorrentd stop
+    cd "$webroot_path"
+    svn co "$rutorrent_svn"
+    echo -e "rutorrent installed from svn\n"
+    updated="yes"
+else
+    echo -e "UPDATING rutorrent"
+    cd "$rutorrent_path"
+    oldsvn=$(svn info | grep "Revision" | cut -c11-)
+    newsvn=$(svn info "$rutorrent_svn" | grep "Revision" | cut -c11-)
+    if [ "$newsvn" != "$oldsvn" ] ; then
+        service rtorrentd stop
+        svn up
+        echo -e "rutorrent updated from $oldsvn to $newsvn\n"
+        updated="yes"
+    else
+        echo -e "rutorrent is already at the latest version: $newsvn\n"
+    fi
+fi
+
+
+echo -e "UPDATING plugins"
+for plugin in ${plugins[*]} ; do
+    if [ ! -d "$plugins_path/$plugin" ] ; then
+        service rtorrentd stop
+        cd "$plugins_path"
+        svn co "$plugins_svn/$plugin"
+        echo -e "$plugin installed from svn\n"
+        updated="yes"
+    else
+        cd "$plugins_path/$plugin"
+        oldsvn=$(svn info | grep "Revision" | cut -c11-)
+        newsvn=$(svn info "$plugins_svn/$plugin" | grep "Revision" | cut -c11-)
+        if [ "$newsvn" != "$oldsvn" ] ; then
+            service rtorrentd stop
+            svn up
+            echo -e "$plugin updated from $oldsvn to $newsvn\n"
+            updated="yes"
+        else
+            echo -e "$plugin is already at the latest version: $newsvn\n"
+        fi
+    fi
+done
+
+for plugin in ${hwk_plugins[*]} ; do
+    if [ ! -d "$plugins_path/$plugin" ] ; then
+        service rtorrentd stop
+        cd "$plugins_path"
+        svn co "$filemanager_svn/$plugin"
+        echo -e "$plugin installed from svn\n"
+        updated="yes"
+    else
+        cd "$plugins_path/$plugin"
+        oldsvn=$(svn info | grep "Revision" | cut -c11-)
+        newsvn=$(svn info "$filemanager_svn/$plugin" | grep "Revision" | cut -c11-)
+        if [ "$newsvn" != "$oldsvn" ] ; then
+            service rtorrentd stop
+            svn up
+            echo -e "$plugin updated from $oldsvn to $newsvn\n"
+            updated="yes"
+        else
+            echo -e "$plugin is already at the latest version: $newsvn\n"
+        fi
+    fi
+done
+
+
+if [ "$updated" == "yes" ] ; then
+    echo -e "Updates were installed. Restarting rtorrent..."
+    service rtorrentd stop
+    chown -R www-data:www-data "$rutorrent_path"
+    service apache2 restart
+    service rtorrentd start
+else
+    echo -e "Already running the latest version of everything!\n"
+fi
