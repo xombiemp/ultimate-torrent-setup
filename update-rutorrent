@@ -91,6 +91,8 @@ if [ "$updated" == "yes" ] ; then
     echo -e "Updates were installed. Restarting rtorrent..."
     service rtorrentd stop
     chown -R www-data:www-data "$rutorrent_path"
+    find $rutorrent_path/share/ -type d -exec chmod 777 {} \;
+    find $rutorrent_path/share/ -type f -exec chmod 666 {} \;
     service apache2 restart
     service rtorrentd start
 else
