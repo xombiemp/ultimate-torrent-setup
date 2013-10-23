@@ -21,7 +21,7 @@ if [ ! -d "$rutorrent_path" ] ; then
     svn co "$rutorrent_svn"
     cd "$rutorrent_path"
     newsvn=$(svn info | grep "Revision" | cut -c11-)
-    perl -p -i -e 's/\$Rev: \d+/\$Rev: $newsvn/' $rutorrent_path/js/webui.js
+    perl -p -i -e 's/\$Rev: \d+/\$Rev: '$newsvn'/' $rutorrent_path/js/webui.js
     echo -e "rutorrent installed from svn\n"
     updated="yes"
 else
@@ -32,7 +32,7 @@ else
     if [ "$newsvn" != "$oldsvn" ] ; then
         service rtorrentd stop
         svn up
-        perl -p -i -e 's/\$Rev: \d+/\$Rev: $newsvn/' $rutorrent_path/js/webui.js
+        perl -p -i -e 's/\$Rev: \d+/\$Rev: '$newsvn'/' $rutorrent_path/js/webui.js
         echo -e "rutorrent updated from $oldsvn to $newsvn\n"
         updated="yes"
     else
