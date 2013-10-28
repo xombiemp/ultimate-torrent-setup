@@ -24,8 +24,8 @@
 USERNAME="YOURUSER"
 # Nice looking name of service for script to report back to users
 SERVERNAME="rTorrent"
-# Filename of server binary
-SERVICE="rtorrent"
+# Full path of server binary
+SERVICE="/usr/local/bin/rtorrent"
 # Path where config file and session directory can be found
 BASEPATH="/home/${USERNAME}/.config/rtorrent"
 # Name of configuration file
@@ -70,21 +70,11 @@ get_session() {
   SESSIONPATH=`cat ${CONFIGPATH} | grep "^[[:space:]]*session[[:space:]]*=" | sed "s/^[[:space:]]*session[[:space:]]*=[[:space:]]*//"`
 }
 
-# Check the rTorrent binary is in the path, check the config file is readable, check the session dir is readable
+# Check the rTorrent binary path exists, check the config file is readable, check the session dir is readable
 check_files() {
-  RTORRENTEXISTS=0
-  for i in `echo "$PATH" | tr ':' '\n'`;
-  do
-    if [ -f ${i}/${SERVICE} ];
-    then
-      RTORRENTEXISTS=1
-      break;
-    fi
-  done
-
-  if [ ${RTORRENTEXISTS} -eq 0 ];
+  if ! [ -f ${SERVICE} ];
   then
-    echo " * Cannot find ${SERVERNAME} binary in PATH ${PATH}"
+    echo " * Cannot find ${SERVERNAME} binary in path ${SERVICE}"
     exit 1;
   fi
 
@@ -127,7 +117,7 @@ do_stop() {
 
   get_pid;
   # make sure the pid doesn't belong to another process
-  if ps -A | grep -sq ${PID}.*${SERVICE};
+  if ps -A | grep -sq ${PID}.*${SERVICE##*/};
   then
     kill -s INT ${PID}
   else
@@ -159,7 +149,7 @@ do_info() {
   echo "- Process ID            : "${PID}""
   echo "- Memory Usage          : `expr ${RSS} / 1024` Mb (${RSS} kb)"
   echo "- Active Connections    : "
-  netstat --ip -anp | grep -E "Proto|${SERVICE}"
+  netstat --ip -anp | grep -E "Proto|${SERVICE##*/}"
 }
 
 # Connect to the active Screen session. Disconnect with Ctrl+a then d
