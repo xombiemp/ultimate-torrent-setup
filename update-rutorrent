@@ -16,7 +16,7 @@ updated="no"
 
 if [ ! -d "$rutorrent_path" ] ; then
     echo -e "INSTALLING rutorrent"
-    service rtorrentd stop
+    service rtorrent stop
     cd "$webroot_path"
     svn co "$rutorrent_svn"
     cd "$rutorrent_path"
@@ -30,7 +30,7 @@ else
     oldsvn=$(svn info | grep "Revision" | cut -c11-)
     newsvn=$(svn info "$rutorrent_svn" | grep "Revision" | cut -c11-)
     if [ "$newsvn" != "$oldsvn" ] ; then
-        service rtorrentd stop
+        service rtorrent stop
         svn up
         perl -p -i -e 's/\$Rev: \d+/\$Rev: '$newsvn'/' $rutorrent_path/js/webui.js
         echo -e "rutorrent updated from $oldsvn to $newsvn\n"
@@ -44,7 +44,7 @@ fi
 echo -e "UPDATING plugins"
 for plugin in ${plugins[*]} ; do
     if [ ! -d "$plugins_path/$plugin" ] ; then
-        service rtorrentd stop
+        service rtorrent stop
         cd "$plugins_path"
         svn co "$plugins_svn/$plugin"
         echo -e "$plugin installed from svn\n"
@@ -54,7 +54,7 @@ for plugin in ${plugins[*]} ; do
         oldsvn=$(svn info | grep "Revision" | cut -c11-)
         newsvn=$(svn info "$plugins_svn/$plugin" | grep "Revision" | cut -c11-)
         if [ "$newsvn" != "$oldsvn" ] ; then
-            service rtorrentd stop
+            service rtorrent stop
             svn up
             echo -e "$plugin updated from $oldsvn to $newsvn\n"
             updated="yes"
@@ -66,7 +66,7 @@ done
 
 for plugin in ${hwk_plugins[*]} ; do
     if [ ! -d "$plugins_path/$plugin" ] ; then
-        service rtorrentd stop
+        service rtorrent stop
         cd "$plugins_path"
         svn co "$filemanager_svn/$plugin"
         echo -e "$plugin installed from svn\n"
@@ -76,7 +76,7 @@ for plugin in ${hwk_plugins[*]} ; do
         oldsvn=$(svn info | grep "Revision" | cut -c11-)
         newsvn=$(svn info "$filemanager_svn/$plugin" | grep "Revision" | cut -c11-)
         if [ "$newsvn" != "$oldsvn" ] ; then
-            service rtorrentd stop
+            service rtorrent stop
             svn up
             echo -e "$plugin updated from $oldsvn to $newsvn\n"
             updated="yes"
@@ -89,12 +89,12 @@ done
 
 if [ "$updated" == "yes" ] ; then
     echo -e "Updates were installed. Restarting rtorrent..."
-    service rtorrentd stop
+    service rtorrent stop
     chown -R www-data:www-data "$rutorrent_path"
     find $rutorrent_path/share/ -type d -exec chmod 777 {} \;
     find $rutorrent_path/share/ -type f -exec chmod 666 {} \;
     service apache2 restart
-    service rtorrentd start
+    service rtorrent start
 else
     echo -e "Already running the latest version of everything!\n"
 fi
