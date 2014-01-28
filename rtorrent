@@ -1,6 +1,5 @@
 #!/bin/bash
 # /etc/init.d/rtorrent
-# version 2013-10-23 (YYYY-MM-DD)
  
 ### BEGIN INIT INFO
 # Provides: rtorrent
