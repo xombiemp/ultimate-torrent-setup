@@ -1,4 +1,4 @@
-ultimate-torrent-setup
-======================
+# Ultimate Torrent Setup
 
-All the files needed for the Ultimate Torrent Setup, featuring Ubuntu, rtorrent, ruTorrent, Sickbeard, CouchPotato.
+This is a repository of all the files you need to configure the ultimate torrent setup.  
+Refer to the wiki for instructions: <a href="https://github.com/xombiemp/ultimate-torrent-setup/wiki" target="_blank">Ultimate Torrent Setup Wiki</a>
