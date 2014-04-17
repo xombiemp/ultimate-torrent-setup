@@ -23,7 +23,7 @@ directory = /CHANGE/THIS/PATH/download
 # Default session directory. Make sure you don't run multiple instance
 # of rtorrent using the same session directory. Perhaps using a
 # relative path?
-session = /CHANGE/THIS/PATH/session
+session = /home/CHANGETOUSER/.config/rtorrent/session
 
 # On torrent finish call rtorrentToSickBeard.py with arguments (file path, torrent name, and label)
 system.method.set_key = event.download.finished,rtorrentToSickBeard,"execute={/home/CHANGETOUSER/.sickbeard/autoProcessTV/rtorrentToSickBeard.py,$d.get_base_path=,$d.get_name=,$d.get_custom1=}"
