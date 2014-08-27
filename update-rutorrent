@@ -4,11 +4,12 @@ webroot_path="/var/www"
 rutorrent_path="$webroot_path/rutorrent"
 plugins_path="$rutorrent_path/plugins"
 
-rutorrent_svn="http://rutorrent.googlecode.com/svn/trunk/rutorrent"
-plugins_svn="http://rutorrent.googlecode.com/svn/trunk/plugins"
+rutorrent_svn="https://github.com/Novik/ruTorrent/trunk/"
+plugins_svn="$rutorrent_svn/plugins"
 filemanager_svn="http://svn.rutorrent.org/svn/filemanager/trunk"
+mobile_svn="https://github.com/xombiemp/rutorrentMobile/trunk"
 
-plugins=(_getdir _task autotools check_port chunks create data datadir diskspace edit erasedata extratio filedrop geoip history httprpc mediainfo ratio scheduler screenshots seedingtime source throttle tracklabels trafic unpack)
+plugins=(_getdir _noty _task autotools check_port chunks cookies create data datadir diskspace edit erasedata extratio filedrop geoip history httprpc loginmgr mediainfo ratio scheduler screenshots seedingtime source throttle tracklabels trafic unpack)
 hwk_plugins=(filemanager fileshare)
 
 updated="no"
@@ -18,10 +19,10 @@ if [ ! -d "$rutorrent_path" ] ; then
     echo -e "INSTALLING rutorrent"
     service rtorrent stop
     cd "$webroot_path"
-    svn co "$rutorrent_svn"
+    svn co "$rutorrent_svn" "rutorrent"
     cd "$rutorrent_path"
-    newsvn=$(svn info | grep "Revision" | cut -c11-)
-    perl -p -i -e 's/\$Rev: \d+/\$Rev: '$newsvn'/' $rutorrent_path/js/webui.js
+    svn update --set-depth=exclude plugins
+    mkdir "$plugins_path"
     echo -e "rutorrent installed from svn\n"
     updated="yes"
 else
@@ -32,7 +33,6 @@ else
     if [ "$newsvn" != "$oldsvn" ] ; then
         service rtorrent stop
         svn up
-        perl -p -i -e 's/\$Rev: \d+/\$Rev: '$newsvn'/' $rutorrent_path/js/webui.js
         echo -e "rutorrent updated from $oldsvn to $newsvn\n"
         updated="yes"
     else
@@ -85,6 +85,26 @@ for plugin in ${hwk_plugins[*]} ; do
         fi
     fi
 done
+
+if [ ! -d "$plugins_path/mobile" ] ; then
+    service rtorrent stop
+    cd "$plugins_path"
+    svn co "$mobile_svn" "mobile"
+    echo -e "mobile installed from svn\n"
+    updated="yes"
+else
+    cd "$plugins_path/mobile"
+    oldsvn=$(svn info | grep "Revision" | cut -c11-)
+    newsvn=$(svn info "$mobile_svn" | grep "Revision" | cut -c11-)
+    if [ "$newsvn" != "$oldsvn" ] ; then
+        service rtorrent stop
+        svn up
+        echo -e "mobile updated from $oldsvn to $newsvn\n"
+        updated="yes"
+    else
+        echo -e "mobile is already at the latest version: $newsvn\n"
+    fi
+fi
 
 
 if [ "$updated" == "yes" ] ; then
