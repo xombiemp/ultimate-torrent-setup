@@ -23,10 +23,11 @@ directory = /CHANGE/THIS/PATH/download
 # Default session directory. Make sure you don't run multiple instance
 # of rtorrent using the same session directory. Perhaps using a
 # relative path?
-session = /home/CHANGETOUSER/.config/rtorrent/session
+session = /home/YOURUSER/.config/rtorrent/session
+session.use_lock.set = yes
 
 # On torrent finish call rtorrentToSickBeard.py with arguments (file path, torrent name, and label)
-system.method.set_key = event.download.finished,rtorrentToSickBeard,"execute={/home/CHANGETOUSER/.sickbeard/autoProcessTV/rtorrentToSickBeard.py,$d.get_base_path=,$d.get_name=,$d.get_custom1=}"
+method.set_key = event.download.finished,rtorrentToSickBeard,"execute2={/home/YOURUSER/.sickbeard/autoProcessTV/rtorrentToSickBeard.py,$d.get_base_path=,$d.get_name=,$d.get_custom1=}"
 
 # Close torrents when diskspace is low.
 #schedule = low_diskspace,5,60,close_low_diskspace=100M
@@ -51,7 +52,7 @@ port_range = 49155-49155
 check_hash = no
 
 # Set whetever the client should try to connect to UDP trackers.
-use_udp_trackers = yes
+trackers.use_udp.set = yes
 
 # Alternative calls to bind and ip that should handle dynamic ip's.
 #schedule = ip_tick,0,1800,ip=rakshasa
@@ -80,7 +81,7 @@ dht_port = 6881
 
 # Enable peer exchange (for torrents not marked private)
 #
-peer_exchange = yes
+protocol.pex.set = yes
 
 #
 # Do not modify the following parameters unless you know what you're doing.
@@ -102,4 +103,4 @@ peer_exchange = yes
 
 #log.execute=/tmp/exec.log
 scgi_port = 127.0.0.1:5000
-execute = {sh,-c,/usr/bin/php /var/www/rutorrent/php/initplugins.php APACHE_WEBAUTH_USER &}
+execute2 = {sh,-c,/usr/bin/php /var/www/rutorrent/php/initplugins.php APACHE_WEBAUTH_USER &}
