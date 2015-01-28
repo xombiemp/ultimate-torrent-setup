@@ -1,7 +1,7 @@
-SB_USER=YOURUSER         					#$RUN_AS, username to run sickbeard under
-SB_HOME=/home/$SB_USER/.sickbeard      		#$APP_PATH, the location of SickBeard.py
-SB_DATA=/home/$SB_USER/.config/sickbeard  	#$DATA_DIR, the location of sickbeard.db, cache, logs
-SB_OPTS=" --config=/home/$SB_USER/.config/sickbeard/config.ini"         #$EXTRA_DAEMON_OPTS,
-## SB_PIDFILE=      #$PID_FILE, the location of sickbeard.pid, the default is /var/run/sickbeard/sickbeard.pid
-## PYTHON_BIN=      #$DAEMON, the location of the python binary, the default is /usr/bin/python
-## SSD_OPTS=        #$EXTRA_SSD_OPTS, extra start-stop-daemon option like " --group=users"
+# COPY THIS FILE TO /etc/default/sickbeard 
+# OPTIONS: SB_HOME, SB_USER, SB_DATA, SB_PIDFILE, PYTHON_BIN, SB_OPTS, SSD_OPTS
+
+SB_USER=YOURUSER
+SB_HOME=/home/$SB_USER/.sickbeard
+SB_DATA=/home/$SB_USER/.config/sickbeard
+SB_OPTS=" --config=/home/$SB_USER/.config/sickbeard/config.ini"
