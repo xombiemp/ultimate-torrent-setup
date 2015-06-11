@@ -26,9 +26,6 @@ directory = /CHANGE/THIS/PATH/download
 session = /home/YOURUSER/.config/rtorrent/session
 session.use_lock.set = yes
 
-# On torrent finish call rtorrentToSickBeard.py with arguments (file path, torrent name, and label)
-method.set_key = event.download.finished,rtorrentToSickBeard,"execute2={/home/YOURUSER/.sickbeard/autoProcessTV/rtorrentToSickBeard.py,$d.base_path=,$d.name=,$d.custom1=}"
-
 # Close torrents when diskspace is low.
 #schedule = low_diskspace,5,60,close_low_diskspace=100M
 

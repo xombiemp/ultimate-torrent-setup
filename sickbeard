@@ -1,7 +1,0 @@
-# COPY THIS FILE TO /etc/default/sickbeard 
-# OPTIONS: SB_HOME, SB_USER, SB_DATA, SB_PIDFILE, PYTHON_BIN, SB_OPTS, SSD_OPTS
-
-SB_USER=YOURUSER
-SB_HOME=/home/$SB_USER/.sickbeard
-SB_DATA=/home/$SB_USER/.config/sickbeard
-SB_OPTS=" --config=/home/$SB_USER/.config/sickbeard/config.ini"
