@@ -5,4 +5,3 @@ CP_USER=YOURUSER
 CP_HOME=/home/$CP_USER/.couchpotato
 CP_DATA=/home/$CP_USER/.config/couchpotato
 CP_OPTS=" --config=/home/$CP_USER/.config/couchpotato/settings.conf"
-CP_PIDFILE=/var/run/couchpotato/couchpotato.pid
