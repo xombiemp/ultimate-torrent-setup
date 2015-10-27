@@ -1,0 +1,30 @@
+# Systemd file for running couchpotato
+#
+# Copy this file to /etc/systemd/system/couchpotato.service
+#
+# To Enable Startup on boot run
+#   - systemctl enable couchpotato.service
+#
+# To Start Service
+#   - systemctl start couchpotato.service
+#
+# Check Status
+#   - systemctl status couchpotato.service
+#
+# Change USERNAME for the user that will be running couchpotato
+#
+
+
+[Unit]
+Description=CouchPotato application instance
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python /home/USERNAME/.couchpotato/CouchPotato.py --daemon --pid_file=/home/USERNAME/.couchpotato/couchpotato.pid
+PIDFile=/home/moe/.couchpotato/couchpotato.pid
+Type=forking
+User=USERNAME
+Group=USERNAME
+
+[Install]
+WantedBy=multi-user.target

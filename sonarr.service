@@ -1,0 +1,32 @@
+# Systemd file for running sonarr
+#
+# Copy this file to /etc/systemd/system/sonarr.service
+#
+# To Enable Startup on boot run
+#   - systemctl enable sonarr.service
+#
+# To Start Service
+#   - systemctl start sonarr.service
+#
+# Check Status
+#   - systemctl status sonarr.service
+#
+# Change USERNAME for the user that will be running sonarr
+#
+
+[Unit]
+Description=Sonarr Daemon
+After=syslog.target network.target
+
+[Service]
+User=USERNAME
+Group=USERNAME
+
+Type=simple
+ExecStart=/opt/NzbDrone/NzbDrone.exe -nobrowser
+TimeoutStopSec=20
+KillMode=process
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
