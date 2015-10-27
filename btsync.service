@@ -1,0 +1,26 @@
+# Systemd file for running btsync
+#
+# Copy this file to /etc/systemd/system/btsync.service
+#
+# To Enable Startup on boot run
+#   - systemctl enable btsync.service
+#
+# To Start Service
+#   - systemctl start btsync.service
+#
+# Check Status
+#   - systemctl status btsync.service
+#
+# Change USERNAME for the user that will be running btsync
+#
+
+[Unit]
+Description=BTSync
+After=network.target
+ 
+[Service]
+User=USERNAME
+ExecStart=/usr/bin/btsync --config /home/USERNAME/.config/btsync/btsync.json --nodaemon
+  
+[Install]
+WantedBy=multi-user.target
