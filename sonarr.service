@@ -1,0 +1,15 @@
+[Unit]
+Description=Sonarr
+After=syslog.target network.target
+
+[Service]
+User=YOURUSER
+Group=YOURUSER
+
+Type=simple
+KillMode=process
+Restart=always
+ExecStart=/usr/bin/mono --debug /opt/NzbDrone/NzbDrone.exe -nobrowser
+
+[Install]
+WantedBy=multi-user.target

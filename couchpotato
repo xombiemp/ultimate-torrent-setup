@@ -1,7 +1,0 @@
-# COPY THIS FILE TO /etc/default/couchpotato 
-# OPTIONS: CP_HOME, CP_USER, CP_DATA, CP_PIDFILE, PYTHON_BIN, CP_OPTS, SSD_OPTS
-
-CP_USER=YOURUSER
-CP_HOME=/home/$CP_USER/.couchpotato
-CP_DATA=/home/$CP_USER/.config/couchpotato
-CP_OPTS=" --config=/home/$CP_USER/.config/couchpotato/settings.conf"

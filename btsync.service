@@ -1,0 +1,13 @@
+[Unit]
+Description=BTSync
+After=network.target
+
+[Service]
+User=YOURUSER
+Group=YOURUSER
+
+Restart=on-failure
+ExecStart=/usr/local/bin/btsync --config /home/YOURUSER/.config/btsync/config.json --nodaemon
+
+[Install]
+WantedBy=multi-user.target
