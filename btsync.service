@@ -3,11 +3,12 @@ Description=BTSync
 After=network.target
 
 [Service]
-User=YOURUSER
-Group=YOURUSER
+User=btsync
+Group=media
+UMask=0002
 
 Restart=on-failure
-ExecStart=/usr/local/bin/btsync --config /home/YOURUSER/.config/btsync/config.json --nodaemon
+ExecStart=/usr/local/bin/btsync --config /var/lib/btsync/config.json --nodaemon
 
 [Install]
 WantedBy=multi-user.target

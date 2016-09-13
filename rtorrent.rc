@@ -23,8 +23,11 @@ directory = /CHANGE/THIS/PATH/download
 # Default session directory. Make sure you don't run multiple instance
 # of rtorrent using the same session directory. Perhaps using a
 # relative path?
-session = /home/YOURUSER/.config/rtorrent/session
+session = /var/lib/rtorrent/session
 session.use_lock.set = yes
+
+# Run the rtorrent process as a daemon in the background
+system.daemon.set = true
 
 # Close torrents when diskspace is low.
 #schedule = low_diskspace,5,60,close_low_diskspace=100M

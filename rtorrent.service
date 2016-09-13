@@ -3,14 +3,14 @@ Description=rTorrent
 After=network.target
 
 [Service]
-User=YOURUSER
-Group=YOURUSER
+User=rtorrent
+Group=media
+UMask=0002
 
-Type=forking
-KillMode=none
+Type=simple
+KillMode=process
 Restart=on-failure
-ExecStart=/usr/bin/screen -d -m -fa -S rtorrent /usr/bin/rtorrent -n -o import=/home/YOURUSER/.config/rtorrent/rtorrent.rc
-ExecStop=/usr/bin/killall -w -s 2 /usr/bin/rtorrent
+ExecStart=/usr/bin/rtorrent -n -o import=/var/lib/rtorrent/rtorrent.rc
 
 [Install]
 WantedBy=multi-user.target

@@ -3,8 +3,9 @@ Description=Sonarr
 After=syslog.target network.target
 
 [Service]
-User=YOURUSER
-Group=YOURUSER
+User=sonarr
+Group=media
+UMask=0002
 
 Type=simple
 KillMode=process

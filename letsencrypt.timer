@@ -1,0 +1,10 @@
+[Unit]
+Description=Timer for Let's Encrypt certificate renewal
+
+[Timer]
+OnCalendar=02:00
+RandomizedDelaySec=1hour
+Persistant=true
+
+[Install]
+WantedBy=multi-user.target

@@ -3,13 +3,14 @@ Description=CouchPotato
 After=network.target
 
 [Service]
-User=YOURUSER
-Group=YOURUSER
+User=couchpotato
+Group=media
+UMask=0002
 
 Type=forking
 GuessMainPID=no
 Restart=on-failure
-ExecStart=/opt/CouchPotatoServer/CouchPotato.py --daemon --data_dir=/home/YOURUSER/.config/couchpotato --config=/home/YOURUSER/.config/couchpotato/settings.conf
+ExecStart=/opt/CouchPotatoServer/CouchPotato.py --daemon --data_dir=/var/lib/couchpotato --config=/var/lib/couchpotato/settings.conf
 
 [Install]
 WantedBy=multi-user.target
