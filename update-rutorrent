@@ -6,11 +6,11 @@ plugins_path="$rutorrent_path/plugins"
 
 rutorrent_svn="https://github.com/Novik/ruTorrent/trunk/"
 plugins_svn="$rutorrent_svn/plugins"
-filemanager_svn="http://svn.rutorrent.org/svn/filemanager/trunk"
+filemanager_svn="https://github.com/nelu/rutorrent-thirdparty-plugins/trunk"
 mobile_svn="https://github.com/xombiemp/rutorrentMobile/trunk"
 
 plugins=(_getdir _noty2 _task autotools check_port chunks cookies create data datadir diskspace edit erasedata extratio filedrop geoip history httprpc loginmgr mediainfo ratio scheduler screenshots seedingtime source throttle tracklabels trafic unpack)
-#hwk_plugins=(filemanager fileshare)
+hwk_plugins=(filemanager fileshare)
 
 updated="no"
 
