@@ -65,7 +65,7 @@ pieces.hash.on_completion.set = no
 
 # Set whether the client should try to connect to UDP trackers.
 #
-trackers.use_udp.set = yes
+trackers.use_udp.set = no
 
 # Alternative calls to bind and ip that should handle dynamic ip's.
 #
@@ -86,15 +86,15 @@ protocol.encryption.set = allow_incoming,try_outgoing,enable_retry
 # "auto" (start and stop DHT as needed), or "on" (start DHT immediately).
 # The default is "off". For DHT to work, a session directory must be defined.
 # 
-dht.mode.set = auto
+dht.mode.set = disable
 
 # UDP port to use for DHT. 
 #
-dht.port.set = 6881
+#dht.port.set = 6881
 
 # Enable peer exchange (for torrents not marked private)
 #
-protocol.pex.set = yes
+protocol.pex.set = no
 
 # Set downlad list layout style. ("full", "compact")
 #
