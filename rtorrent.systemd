@@ -1,0 +1,30 @@
+# Systemd file for running rtorrent
+#
+# Copy this file to /etc/systemd/system/rtorrent.service
+#
+# To Enable Startup on boot run 
+#   - systemctl enable rtorrent.service
+#
+# To Start Service
+#   - systemctl start rtorrent.service
+#
+# Check Status
+#   - systemctl status rtorrent.service
+#
+# Change USERNAME for the user that will be running rtorrent
+#
+[Unit]
+Description=rTorrent
+After=network.target
+
+[Service]
+Type=forking
+KillMode=none
+User=moe
+ExecStart=/usr/bin/screen -d -m -fa -S rtorrent /usr/local/bin/rtorrent -n -o import=/home/moe/.config/rtorrent/rtorrent.rc
+ExecStop=/usr/bin/killall -w -s 2 /usr/local/bin/rtorrent
+WorkingDirectory=/home/moe/
+
+[Install]
+WantedBy=multi-user.target
+
