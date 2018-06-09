@@ -1,0 +1,16 @@
+[Unit]
+Description=Radarr
+After=syslog.target network.target
+
+[Service]
+User=radarr
+Group=media
+UMask=0002
+
+Type=simple
+KillMode=process
+Restart=always
+ExecStart=/usr/bin/mono --debug /opt/Radarr/Radarr.exe -nobrowser
+
+[Install]
+WantedBy=multi-user.target

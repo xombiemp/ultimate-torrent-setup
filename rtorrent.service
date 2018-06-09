@@ -10,7 +10,7 @@ UMask=0002
 Type=simple
 KillMode=process
 Restart=on-failure
-ExecStart=/usr/bin/rtorrent -n -o import=/var/lib/rtorrent/rtorrent.rc
+ExecStart=/usr/local/bin/rtorrent -n -o import=/var/lib/rtorrent/rtorrent.rc
 
 [Install]
 WantedBy=multi-user.target
