@@ -110,4 +110,4 @@ protocol.pex.set = no
 
 #network.scgi.open_port = 127.0.0.1:5000
 network.scgi.open_local = /var/lib/rtorrent/rtorrent.sock
-execute2 = {sh,-c,/usr/bin/php /var/www/rutorrent/php/initplugins.php APACHE_WEBAUTH_USER &}
+execute2 = {sh,-c,/usr/bin/php /var/www/rutorrent/php/initplugins.php HTPASSWD_WEBAUTH_USER &}
