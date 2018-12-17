@@ -3,115 +3,96 @@
 webroot_path="/var/www"
 rutorrent_path="$webroot_path/rutorrent"
 plugins_path="$rutorrent_path/plugins"
+webserver_service="apache2.service"
 
-rutorrent_svn="https://github.com/Novik/ruTorrent/trunk/"
-plugins_svn="$rutorrent_svn/plugins"
-filemanager_svn="https://github.com/nelu/rutorrent-thirdparty-plugins/trunk"
-mobile_svn="https://github.com/xombiemp/rutorrentMobile/trunk"
-
-plugins=(_getdir _noty2 _task autotools check_port chunks cookies create data datadir diskspace edit erasedata extratio filedrop geoip history httprpc loginmgr mediainfo ratio scheduler screenshots seedingtime source throttle tracklabels trafic unpack)
-hwk_plugins=(filemanager fileshare)
+rutorrent_repo="https://github.com/Novik/ruTorrent.git"
+filemanager_repo="https://github.com/nelu/rutorrent-thirdparty-plugins.git"
+mobile_repo="https://github.com/xombiemp/rutorrentMobile.git"
 
 updated="no"
 
+stop_rtorrent () {
+    systemctl stop rtorrent.service
+}
+
+start_rtorrent () {
+    systemctl start rtorrent.service
+}
+
+restart_webserver () {
+    systemctl restart "$webserver_service"
+}
 
 if [ ! -d "$rutorrent_path" ] ; then
-    echo -e "INSTALLING rutorrent"
-    service rtorrent stop
+    echo -e "INSTALLING ruTorrent"
+    stop_rtorrent
     cd "$webroot_path"
-    svn co "$rutorrent_svn" "rutorrent"
-    cd "$rutorrent_path"
-    svn update --set-depth=exclude plugins
-    mkdir "$plugins_path"
-    echo -e "rutorrent installed from svn\n"
+    git clone "$rutorrent_repo" rutorrent
+    echo -e "ruTorrent installed from git\n"
     updated="yes"
 else
-    echo -e "UPDATING rutorrent"
+    echo -e "UPDATING ruTorrent"
     cd "$rutorrent_path"
-    oldsvn=$(svn info | grep "Revision" | cut -c11-)
-    newsvn=$(svn info "$rutorrent_svn" | grep "Revision" | cut -c11-)
-    if [ "$newsvn" != "$oldsvn" ] ; then
-        service rtorrent stop
-        svn up
-        echo -e "rutorrent updated from $oldsvn to $newsvn\n"
+    git fetch
+    localhash=$(git rev-parse HEAD)
+    remotehash=$(git rev-parse origin/master)
+    if [ "$remotehash" != "$localhash" ] ; then
+        stop_rtorrent
+        git pull origin master
+        echo -e "ruTorrent updated from $localhash to $remotehash\n"
         updated="yes"
     else
-        echo -e "rutorrent is already at the latest version: $newsvn\n"
+        echo -e "ruTorrent is already at the latest version: $remotehash\n"
     fi
 fi
 
-
-echo -e "UPDATING plugins"
-for plugin in ${plugins[*]} ; do
-    if [ ! -d "$plugins_path/$plugin" ] ; then
-        service rtorrent stop
-        cd "$plugins_path"
-        svn co "$plugins_svn/$plugin"
-        echo -e "$plugin installed from svn\n"
+cd "$plugins_path"
+plugin_repo=$(git remote get-url origin)
+if [ "$plugin_repo" != "$filemanager_repo" ] ; then
+    stop_rtorrent
+    git init
+    git remote add -f origin "$filemanager_repo"
+    git pull origin master
+    updated="yes"
+else
+    git fetch
+    localhash=$(git rev-parse HEAD)
+    remotehash=$(git rev-parse origin/master)
+    if [ "$remotehash" != "$localhash" ] ; then
+        stop_rtorrent
+        git pull origin master
+        echo -e "hwk plugins updated from $localhash to $remotehash\n"
         updated="yes"
     else
-        cd "$plugins_path/$plugin"
-        oldsvn=$(svn info | grep "Revision" | cut -c11-)
-        newsvn=$(svn info "$plugins_svn/$plugin" | grep "Revision" | cut -c11-)
-        if [ "$newsvn" != "$oldsvn" ] ; then
-            service rtorrent stop
-            svn up
-            echo -e "$plugin updated from $oldsvn to $newsvn\n"
-            updated="yes"
-        else
-            echo -e "$plugin is already at the latest version: $newsvn\n"
-        fi
+        echo -e "hwk plugins are already at the latest version: $remotehash\n"
     fi
-done
-
-for plugin in ${hwk_plugins[*]} ; do
-    if [ ! -d "$plugins_path/$plugin" ] ; then
-        service rtorrent stop
-        cd "$plugins_path"
-        svn co "$filemanager_svn/$plugin"
-        echo -e "$plugin installed from svn\n"
-        updated="yes"
-    else
-        cd "$plugins_path/$plugin"
-        oldsvn=$(svn info | grep "Revision" | cut -c11-)
-        newsvn=$(svn info "$filemanager_svn/$plugin" | grep "Revision" | cut -c11-)
-        if [ "$newsvn" != "$oldsvn" ] ; then
-            service rtorrent stop
-            svn up
-            echo -e "$plugin updated from $oldsvn to $newsvn\n"
-            updated="yes"
-        else
-            echo -e "$plugin is already at the latest version: $newsvn\n"
-        fi
-    fi
-done
+fi
 
 if [ ! -d "$plugins_path/mobile" ] ; then
-    service rtorrent stop
+    stop_rtorrent
     cd "$plugins_path"
-    svn co "$mobile_svn" "mobile"
-    echo -e "mobile installed from svn\n"
+    git clone "$mobile_repo" mobile
     updated="yes"
 else
     cd "$plugins_path/mobile"
-    oldsvn=$(svn info | grep "Revision" | cut -c11-)
-    newsvn=$(svn info "$mobile_svn" | grep "Revision" | cut -c11-)
-    if [ "$newsvn" != "$oldsvn" ] ; then
-        service rtorrent stop
-        svn up
-        echo -e "mobile updated from $oldsvn to $newsvn\n"
+    git fetch
+    localhash=$(git rev-parse HEAD)
+    remotehash=$(git rev-parse origin/master)
+    if [ "$remotehash" != "$localhash" ] ; then
+        stop_rtorrent
+        git pull origin master
+        echo -e "mobile updated from $localhash to $remotehash\n"
         updated="yes"
     else
-        echo -e "mobile is already at the latest version: $newsvn\n"
+        echo -e "mobile is already at the latest version: $remotehash\n"
     fi
 fi
 
-
 if [ "$updated" == "yes" ] ; then
     echo -e "Updates were installed. Restarting rtorrent..."
-    service rtorrent stop
-    service apache2 restart
-    service rtorrent start
+    stop_rtorrent
+    restart_webserver
+    start_rtorrent
 else
     echo -e "Already running the latest version of everything!\n"
 fi
