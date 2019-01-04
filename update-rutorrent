@@ -38,7 +38,7 @@ else
     remotehash=$(git rev-parse origin/master)
     if [ "$remotehash" != "$localhash" ] ; then
         stop_rtorrent
-        git pull origin master
+        git pull
         echo -e "ruTorrent updated from $localhash to $remotehash\n"
         updated="yes"
     else
@@ -52,7 +52,7 @@ if [ "$plugin_repo" != "$filemanager_repo" ] ; then
     stop_rtorrent
     git init
     git remote add -f origin "$filemanager_repo"
-    git pull origin master
+    git pull
     updated="yes"
 else
     git fetch
@@ -60,7 +60,7 @@ else
     remotehash=$(git rev-parse origin/master)
     if [ "$remotehash" != "$localhash" ] ; then
         stop_rtorrent
-        git pull origin master
+        git pull
         echo -e "hwk plugins updated from $localhash to $remotehash\n"
         updated="yes"
     else
@@ -80,7 +80,7 @@ else
     remotehash=$(git rev-parse origin/master)
     if [ "$remotehash" != "$localhash" ] ; then
         stop_rtorrent
-        git pull origin master
+        git pull
         echo -e "mobile updated from $localhash to $remotehash\n"
         updated="yes"
     else
