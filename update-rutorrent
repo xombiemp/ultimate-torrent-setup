@@ -52,7 +52,8 @@ if [ "$plugin_repo" != "$filemanager_repo" ] ; then
     stop_rtorrent
     git init
     git remote add -f origin "$filemanager_repo"
-    git pull
+    git pull origin master
+    git branch --set-upstream-to=origin/master master
     updated="yes"
 else
     git fetch
