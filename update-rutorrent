@@ -3,7 +3,7 @@
 webroot_path="/var/www"
 rutorrent_path="$webroot_path/rutorrent"
 plugins_path="$rutorrent_path/plugins"
-webserver_service="apache2.service"
+webserver_service="caddy.service"
 
 rutorrent_repo="https://github.com/Novik/ruTorrent.git"
 filemanager_repo="https://github.com/nelu/rutorrent-thirdparty-plugins.git"
