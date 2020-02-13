@@ -3,14 +3,15 @@ Description=rTorrent
 After=network.target
 
 [Service]
+Type=forking
+KillMode=none
 User=rtorrent
 Group=media
 UMask=0002
-
-Type=simple
-KillMode=process
+ExecStartPre=/usr/bin/bash -c "if test -e /var/lib/rtorrent/session/rtorrent.lock && test -z `pidof rtorrent`; then rm -f /var/lib/rtorrent/session/rtorrent.lock; fi"
+ExecStart=/usr/bin/screen -dmfa -S rtorrent /usr/bin/rtorrent -n -o import=/etc/rtorrent/rtorrent.rc
+ExecStop=/usr/bin/bash -c "test `pidof rtorrent` && killall -w -s 2 /usr/bin/rtorrent"
 Restart=on-failure
-ExecStart=/usr/bin/rtorrent -n -o import=/etc/rtorrent/rtorrent.rc
 
 [Install]
 WantedBy=multi-user.target
