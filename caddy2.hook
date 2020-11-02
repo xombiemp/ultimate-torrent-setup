@@ -1,0 +1,10 @@
+[Trigger]
+Type = Package
+Operation = Install
+Operation = Upgrade
+Target = caddy2
+
+[Action]
+Description = Compiling caddy...
+When = PostTransaction
+Exec = /usr/local/bin/update-caddy

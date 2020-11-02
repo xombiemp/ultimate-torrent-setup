@@ -1,0 +1,68 @@
+{
+    default_sni yourdomain.com
+    email youremailaddress@gmail.com
+}
+
+https://yourdomain.com {
+  root * /var/www
+  file_server
+  encode gzip
+  header Cache-Control "no-cache"
+  php_fastcgi unix//var/run/php-fpm/php-fpm.sock
+  
+  route /auth* {
+    auth_portal {
+      local_backend /etc/caddy/auth/local/users.json
+      jwt_token_file 1 /etc/caddy/auth/local/jwt_privatekey.pem
+    }
+  }
+
+  @protected not path /favicon.ico /public* /tautulli/api*
+  route @protected {
+    jwt {
+      primary yes
+      user_identity subject
+      trusted_public_key 1 /etc/caddy/auth/local/jwt_publickey.pem
+    }
+  }
+  
+  @logout path_regexp /logout$
+  rewrite @logout /auth/logout
+  
+  @restricted path_regexp /\.(git|htaccess)|/rutorrent/(conf|share)
+  respond @restricted 404
+
+  reverse_proxy /sonarr* 127.0.0.1:8989
+
+  reverse_proxy /radarr* 127.0.0.1:7878
+
+  reverse_proxy /lidarr* 127.0.0.1:8686
+
+  reverse_proxy /tautulli* 127.0.0.1:8181
+  
+  @rslsync path /sync* /gui*
+  route @rslsync {
+    jwt
+    redir /sync /sync/
+    uri replace /sync/ /gui/
+    reverse_proxy 127.0.0.1:8888
+  }
+}
+
+http://localhost {
+  root * /var/www
+  file_server
+  encode gzip
+  php_fastcgi unix//var/run/php-fpm/php-fpm.sock
+}
+
+http://yourdomain.com/public* {
+  root * /var/www
+  file_server
+  encode gzip
+  php_fastcgi unix//var/run/php-fpm/php-fpm.sock
+}
+
+http://yourdomain.com {
+  redir https://{host}{uri}
+}
