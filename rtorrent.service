@@ -1,6 +1,7 @@
 [Unit]
 Description=rTorrent
-After=network.target
+Wants=network-online.target
+After=network-online.target
 
 [Service]
 User=rtorrent
@@ -9,8 +10,12 @@ UMask=0002
 
 Type=simple
 KillMode=process
-Restart=on-failure
+ExecStartPre=/usr/bin/bash -c "if test -e /var/lib/rtorrent/session/rtorrent.lock && test -z `pidof rtorrent`; then rm -f /var/lib/rtorrent/session/rtorrent.lock; fi"
+ExecStartPre=/usr/bin/bash -c "if test -e /var/lib/rtorrent/rtorrent.sock && test -z `pidof rtorrent`; then rm -f /var/lib/rtorrent/rtorrent.sock; fi"
 ExecStart=/usr/bin/rtorrent -n -o import=/etc/rtorrent/rtorrent.rc
+ExecStop=/usr/bin/bash -c "test `pidof rtorrent` && killall -w -SIGINT /usr/bin/rtorrent"
+TimeoutStopSec=30
+Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target
