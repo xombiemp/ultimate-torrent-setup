@@ -14,6 +14,16 @@ https://yourdomain.com {
     auth_portal {
       local_backend /etc/caddy/auth/local/users.json
       jwt_token_file 1 /etc/caddy/auth/local/jwt_privatekey.pem
+      ui {
+        links {
+          "Tautulli" /tautulli
+          "ruTorrent" /rutorrent
+          "Sonarr" /sonarr
+          "Radarr" /radarr
+          "Lidarr" /lidarr
+          "Resillio Sync" /sync
+        }
+      }
     }
   }
 
