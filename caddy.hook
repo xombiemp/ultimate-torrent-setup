@@ -2,7 +2,7 @@
 Type = Package
 Operation = Install
 Operation = Upgrade
-Target = caddy2
+Target = caddy
 
 [Action]
 Description = Compiling caddy...

@@ -1,19 +1,9 @@
 {
-    default_sni yourdomain.com
-    email youremailaddress@gmail.com
-}
-
-https://yourdomain.com {
-  root * /var/www
-  file_server
-  encode gzip
-  header Cache-Control "no-cache"
-  php_fastcgi unix//var/run/php-fpm/php-fpm.sock
-  
-  route /auth* {
-    auth_portal {
-      local_backend /etc/caddy/auth/local/users.json
-      jwt_token_file 1 /etc/caddy/auth/local/jwt_privatekey.pem
+  default_sni yourdomain.com
+  email youremailaddress@gmail.com
+  security {
+    authentication portal myportal {
+      backend local /etc/caddy/auth/local/users.json local
       ui {
         links {
           "Tautulli" /tautulli
@@ -25,20 +15,33 @@ https://yourdomain.com {
         }
       }
     }
+    authorization policy admin_policy {
+      set user identity subject
+      allow roles authp/admin
+    }
+  }
+}
+
+https://yourdomain.com {
+  root * /var/www
+  file_server
+  header Cache-Control "no-cache"
+  php_fastcgi unix//var/run/php-fpm/php-fpm.sock
+
+  route /auth* {
+    authenticate with myportal
   }
 
   @protected not path /favicon.ico /public* /tautulli/api*
   route @protected {
-    jwt {
-      primary yes
-      user_identity subject
-      trusted_public_key 1 /etc/caddy/auth/local/jwt_publickey.pem
-    }
+    authorize with admin_policy
   }
-  
+
+  redir / /auth/portal 
+
   @logout path_regexp /logout$
   rewrite @logout /auth/logout
-  
+
   @restricted path_regexp /\.(git|htaccess)|/rutorrent/(conf|share)
   respond @restricted 404
 
@@ -49,27 +52,29 @@ https://yourdomain.com {
   reverse_proxy /lidarr* 127.0.0.1:8686
 
   reverse_proxy /tautulli* 127.0.0.1:8181
-  
+
   @rslsync path /sync* /gui*
   route @rslsync {
-    jwt
+    authorize with admin_policy
     redir /sync /sync/
     uri replace /sync/ /gui/
     reverse_proxy 127.0.0.1:8888
   }
 }
 
+#https://requests.yourdomain.com {
+#  reverse_proxy 127.0.0.1:5055
+#}
+
 http://localhost {
   root * /var/www
   file_server
-  encode gzip
   php_fastcgi unix//var/run/php-fpm/php-fpm.sock
 }
 
 http://yourdomain.com/public* {
   root * /var/www
   file_server
-  encode gzip
   php_fastcgi unix//var/run/php-fpm/php-fpm.sock
 }
 

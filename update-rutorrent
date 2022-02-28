@@ -46,28 +46,27 @@ else
     fi
 fi
 
-cd "$plugins_path"
-plugin_repo=$(git remote get-url origin)
-if [ "$plugin_repo" != "$filemanager_repo" ] ; then
-    stop_rtorrent
-    git init
-    git remote add -f origin "$filemanager_repo"
-    git pull origin master
-    git branch --set-upstream-to=origin/master master
-    updated="yes"
-else
-    git fetch
-    localhash=$(git rev-parse HEAD)
-    remotehash=$(git rev-parse origin/master)
-    if [ "$remotehash" != "$localhash" ] ; then
-        stop_rtorrent
-        git pull
-        echo -e "hwk plugins updated from $localhash to $remotehash\n"
-        updated="yes"
-    else
-        echo -e "hwk plugins are already at the latest version: $remotehash\n"
-    fi
-fi
+#cd "$plugins_path"
+#plugin_repo=$(git remote get-url origin)
+#if [ "$plugin_repo" != "$filemanager_repo" ] ; then
+#    stop_rtorrent
+#    git init
+#    git remote add -f origin "$filemanager_repo"
+#    git pull
+#    updated="yes"
+#else
+#    git fetch
+#    localhash=$(git rev-parse HEAD)
+#    remotehash=$(git rev-parse origin/master)
+#    if [ "$remotehash" != "$localhash" ] ; then
+#        stop_rtorrent
+#        git pull
+#        echo -e "hwk plugins updated from $localhash to $remotehash\n"
+#        updated="yes"
+#    else
+#        echo -e "hwk plugins are already at the latest version: $remotehash\n"
+#    fi
+#fi
 
 if [ ! -d "$plugins_path/mobile" ] ; then
     stop_rtorrent
@@ -78,7 +77,7 @@ else
     cd "$plugins_path/mobile"
     git fetch
     localhash=$(git rev-parse HEAD)
-    remotehash=$(git rev-parse origin/master)
+    remotehash=$(git rev-parse origin/large-screen)
     if [ "$remotehash" != "$localhash" ] ; then
         stop_rtorrent
         git pull

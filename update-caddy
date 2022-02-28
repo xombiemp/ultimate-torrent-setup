@@ -2,8 +2,7 @@
 systemctl stop caddy.service
 cd /tmp
 xcaddy build \
-	--with github.com/abiosoft/caddy-exec \
-	--with github.com/greenpau/caddy-auth-jwt \
-	--with github.com/greenpau/caddy-auth-portal
+    --with github.com/abiosoft/caddy-exec \
+    --with github.com/greenpau/caddy-security
 mv caddy /usr/bin
 systemctl start caddy.service
