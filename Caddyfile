@@ -2,8 +2,12 @@
   default_sni yourdomain.com
   email youremailaddress@gmail.com
   security {
+    local identity store localdb {
+      realm local
+      path /etc/caddy/auth/local/users.json
+    }
     authentication portal myportal {
-      backend local /etc/caddy/auth/local/users.json local
+      enable identity store localdb
       ui {
         links {
           "Tautulli" /tautulli
