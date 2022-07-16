@@ -76,12 +76,14 @@ http://localhost {
   php_fastcgi unix//var/run/php-fpm/php-fpm.sock
 }
 
-http://yourdomain.com/public* {
-  root * /var/www
-  file_server
-  php_fastcgi unix//var/run/php-fpm/php-fpm.sock
-}
-
 http://yourdomain.com {
-  redir https://{host}{uri}
+  handle /public* {
+    root * /var/www
+    file_server
+    php_fastcgi unix//var/run/php-fpm/php-fpm.sock
+  }
+
+  handle {
+    redir https://{host}{uri}
+  }
 }
