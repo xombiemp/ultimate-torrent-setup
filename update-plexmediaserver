@@ -1,2 +1,0 @@
-#!/bin/bash
-/opt/plexupdate/plexupdate.sh -u -a -d --config /opt/plexupdate/plexupdate.conf
