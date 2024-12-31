@@ -16,6 +16,7 @@
           "Radarr" /radarr
           "Lidarr" /lidarr
           "Resillio Sync" /sync
+          "User Dashboard" /auth/profile/ icon "las la-cog"
         }
       }
     }
