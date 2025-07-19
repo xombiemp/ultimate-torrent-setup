@@ -1,0 +1,35 @@
+#!/bin/bash
+
+if [ "$#" -ne 3 ]; then
+    echo "Error: Invalid number of arguments."
+    echo "Usage: $0 <domain> <key_file> <cert_file>"
+    exit 1
+fi
+
+DOMAIN="$1"
+KEY_FILE="$2"
+CERT_FILE="$3"
+
+case "$DOMAIN" in
+  "yourdomain.com")
+    sudo /usr/bin/systemctl stop quassel.service
+
+    cat "$KEY_FILE" > /var/lib/quassel/quasselCert.pem
+    cat "$CERT_FILE" >> /var/lib/quassel/quasselCert.pem
+
+    chgrp quassel /var/lib/quassel/quasselCert.pem
+    chmod 640 /var/lib/quassel/quasselCert.pem
+
+    sudo /usr/bin/systemctl start quassel.service
+    ;;
+
+  # Add another case for a different domain like this:
+  # "anotherdomain.com")
+  #   # Commands for anotherdomain.com
+  #   ;;
+
+  *)
+    # This default case handles any input that doesn't match the cases above
+    echo "No actions taken for  domain '$DOMAIN'"
+    ;;
+esac

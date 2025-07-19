@@ -8,6 +8,8 @@
     }
     authentication portal myportal {
       enable identity store localdb
+      crypto default token lifetime 3600
+      cookie lifetime 7200
       ui {
         links {
           "Tautulli" /tautulli
@@ -25,6 +27,9 @@
       allow roles authp/admin
     }
   }
+  // events {
+  //   on cert_obtained exec /usr/local/bin/update-quasselcert {event.data.identifier} {event.data.private_key_path} {event.data.certificate_path}
+  // }
 }
 
 https://yourdomain.com {
